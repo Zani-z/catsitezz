@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>decodesoftware - gato estelar</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: black;
+      overflow: hidden;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+      color: white;
+      position: relative;
+      transition: background 1s linear;
+    }
+
+    .trail {
+      position: absolute;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .floating-img {
+      width: 350px;
+      height: auto;
+      position: absolute;
+      top: 30%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 2;
+      transition: filter 0.4s ease, transform 0.4s ease;
+    }
+
+    .image-overlay {
+      position: absolute;
+      top: 30%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 350px;
+      height: 100%;
+      z-index: 3;
+      background: rgba(0, 0, 0, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 5rem;
+      font-weight: bold;
+      color: white;
+      pointer-events: none;
+    }
+
+    .hidden { display: none; }
+
+    .active-floating {
+      animation: moveAllAround 10s infinite linear alternate;
+      filter: brightness(2) drop-shadow(0 0 15px white) drop-shadow(0 0 40px magenta);
+    }
+
+    @keyframes moveAllAround {
+      0%   { top: 0; left: 0; }
+      25%  { top: 10vh; left: 80vw; }
+      50%  { top: 70vh; left: 20vw; }
+      75%  { top: 90vh; left: 90vw; }
+      100% { top: 0; left: 0; }
+    }
+
+    .content {
+      position: absolute;
+      bottom: 30px;
+      width: 100%;
+      text-align: center;
+      z-index: 3;
+    }
+
+    .content h1 {
+      font-size: 1.5rem;
+      font-weight: normal;
+      color: white;
+    }
+
+    .content p {
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+
+    .music-btn {
+      margin-top: 40px;
+      padding: 20px 40px;
+      font-size: 1.5rem;
+      font-weight: bold;
+      background: linear-gradient(45deg, magenta, cyan);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      animation: glow 1.5s infinite alternate;
+    }
+
+    @keyframes glow {
+      from {
+        box-shadow: 0 0 10px magenta, 0 0 20px cyan;
+      }
+      to {
+        box-shadow: 0 0 20px cyan, 0 0 40px magenta;
+      }
+    }
+
+    .warning-btn {
+      margin-top: 20px;
+      padding: 30px 50px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      background: #444;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="trail" id="trail"></div>
+
+  <img src="imagemcat.png.png" alt="Gato flutuante" class="floating-img" id="gato" />
+  <div class="image-overlay" id="gato-overlay">?</div>
+
+  <div class="content">
+    <h1>decodesoftware</h1>
+    <p>sig. Zani</p>
+    <br />
+    <button class="music-btn" id="botao-musica" onclick="tocarBalada()">touch me, please daddy</button>
+    <br />
+    <button class="warning-btn" id="botao-warning">DONT PRESS THE BUTTON! NO MATTER WHAT IT SAYS TO YOU! PLEASE DONT</button>
+  </div>
+
+  <audio id="musica" loop preload="auto">
+    <source src="musicacat.mp3.mp3" type="audio/mpeg" />
+  </audio>
+
+  <audio id="miau" preload="auto">
+    <source src="miau.mp3.mp3" type="audio/mpeg" />
+  </audio>
+
+  <script>
+    let saturacao = 1;
+
+    function tocarBalada() {
+      const musica = document.getElementById("musica");
+      const miau = document.getElementById("miau");
+      const gato = document.getElementById("gato");
+      const overlay = document.getElementById("gato-overlay");
+      const body = document.body;
+      const botaoWarning = document.getElementById("botao-warning");
+      const botaoMusica = document.getElementById("botao-musica");
+
+      musica.currentTime = 16;
+      musica.play();
+      miau.play();
+
+      gato.classList.add("active-floating");
+      overlay.classList.add("hidden");
+
+      botaoWarning.innerText = "oh, no. Now you cant stop the music. Thank you............";
+      botaoMusica.innerText = "danceee withh meeeeeeowww";
+
+      saturacao += 1;
+      let hue = 0;
+
+      clearInterval(window._colorShift);
+      window._colorShift = setInterval(() => {
+        hue = (hue + 5) % 360;
+        body.style.background = `hsl(${hue}, ${saturacao * 20}%, 10%)`;
+      }, 100);
+    }
+  </script>
+</body>
+</html>
